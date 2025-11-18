@@ -1,0 +1,267 @@
+/* BASE & DESIGN SYSTEM (Clean & Modern) */
+:root {
+    --primary-color: #1E40AF; /* Azul escuro */
+    --primary-light: #3B82F6; /* Azul claro para hover */
+    --accent-color: #10B981; /* Verde (Entrada/Sucesso) */
+    --danger-color: #EF4444; /* Vermelho (Saída/Perigo) */
+    --warning-color: #F59E0B; /* Laranja (Pausa) */
+    --bg-color: #F9FAFB; /* Cinza muito claro */
+    --card-bg: white;
+    --text-color-dark: #1F2937;
+    --text-color-light: #6B7280;
+    --nav-height: 4.5rem;
+    --border-radius: 0.75rem;
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color-dark);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    touch-action: pan-y;
+}
+
+/* ESTRUTURA PRINCIPAL */
+header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+main {
+    flex-grow: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+/* CONTAINER DE TELAS PARA SWIPE */
+article.screen-wrapper {
+    display: flex;
+    height: 100%;
+    width: 300%;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+/* CADA TELA */
+section.screen {
+    width: calc(100% / 3);
+    height: 100%;
+    flex-shrink: 0;
+    padding: 1.5rem 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--card-bg); 
+}
+
+/* Tela Ponto (Centralizada) */
+#ponto-screen {
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+/* COMPONENTES GERAIS */
+.card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 400px;
+}
+
+/* STATUS E FEEDBACK */
+.status-message {
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    color: white;
+    box-shadow: var(--shadow-sm);
+    transition: background-color 0.3s;
+}
+.status-entrada { background-color: var(--accent-color); }
+.status-pausa { background-color: var(--warning-color); }
+.status-saida { background-color: var(--danger-color); }
+.status-automatico { background-color: #6B7280; } /* Cinza para automático */
+
+#message-area {
+    min-height: 2rem;
+    font-size: 1rem;
+}
+
+/* CRONÔMETRO */
+.chronometer-card {
+    display: none; /* Escondido por padrão, só aparece após ENTRADA */
+    text-align: center;
+    border: 2px solid var(--primary-light);
+    background-color: #EEF2FF;
+}
+.chronometer-label {
+    font-size: 0.9rem;
+    color: var(--text-color-light);
+    margin-bottom: 0.5rem;
+}
+.chronometer-time {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+
+/* BOTÃO DE PONTO */
+.punch-button {
+    background-color: var(--primary-light);
+    color: white;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 9999px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px var(--primary-color), 0 8px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.punch-button:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px var(--primary-color), 0 4px 10px rgba(0, 0, 0, 0.2);
+    background-color: var(--primary-color);
+}
+
+/* TELA REGISTRO */
+.registro-filter {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.filter-button {
+    background-color: var(--bg-color);
+    color: var(--text-color-dark);
+    border: 1px solid #D1D5DB;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.filter-button.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.registro-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px dashed #E5E7EB;
+    font-size: 1rem;
+}
+.registro-list-item:last-child {
+    border-bottom: none;
+}
+
+.registro-time {
+    font-weight: 700;
+    min-width: 5rem;
+    text-align: right;
+}
+
+/* TELA CONFIGURAÇÕES */
+.config-group {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 1.5rem;
+}
+
+.config-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--primary-color);
+}
+.config-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #D1D5DB;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    text-align: center;
+}
+.input-hint {
+    font-size: 0.75rem;
+    color: var(--text-color-light);
+    margin-top: 0.25rem;
+}
+
+/* NAVEGAÇÃO */
+nav {
+    background-color: var(--card-bg);
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
+    z-index: 10;
+}
+
+ul.nav-list {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    height: var(--nav-height);
+}
+
+ul.nav-list li {
+    flex-grow: 1;
+}
+
+ul.nav-list a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--text-color-light);
+    font-size: 0.75rem;
+    height: 100%;
+    transition: color 0.2s;
+    border-top: 4px solid transparent;
+}
+
+ul.nav-list a.active {
+    color: var(--primary-color);
+    font-weight: 600;
+    border-top-color: var(--primary-color);
+}
+
+.nav-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-bottom: 0.2rem;
+    fill: currentColor;
+}

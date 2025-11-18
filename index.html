@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-ponto - Ponto Eletrônico</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1E40AF">
+    <link rel="apple-touch-icon" href="images/icon-192.png">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header role="banner">
+        E-ponto
+    </header>
+
+    <main role="main">
+        <article class="screen-wrapper" id="screenWrapper">
+            
+            <section class="screen" id="ponto-screen" data-index="0" aria-labelledby="ponto-heading">
+                <header id="ponto-heading">
+                    <hgroup class="card">
+                        <h2 class="text-xl font-semibold text-center mb-2">Próximo Ponto:</h2>
+                        <div id="next-action-status" class="status-message"></div>
+                        <time id="current-time" class="text-4xl font-bold mt-4">--:--:--</time>
+                    </hgroup>
+                </header>
+
+                <div id="chronometer-area" class="chronometer-card card">
+                    <p class="chronometer-label">Tempo de Jornada:</p>
+                    <time id="chronometer" class="chronometer-time">00:00:00</time>
+                </div>
+
+                <button class="punch-button" onclick="registrarPonto()">
+                    BATER PONTO
+                </button>
+
+                <p id="message-area" class="mt-8 text-lg font-medium"></p>
+                
+                <footer class="mt-auto text-sm text-gray-500">
+                    <p>Último registro: <span id="last-punch">Nenhum</span></p>
+                </footer>
+            </section>
+            
+            <section class="screen" id="registro-screen" data-index="1" aria-labelledby="registro-heading">
+                <header id="registro-heading">
+                    <h2 class="text-2xl font-bold">Meus Registros</h2>
+                </header>
+
+                <nav class="registro-filter" role="tablist">
+                    <button class="filter-button active" data-filter="today" onclick="loadRegistros('today', this)" role="tab">Hoje</button>
+                    <button class="filter-button" data-filter="week" onclick="loadRegistros('week', this)" role="tab">Semana</button>
+                    <button class="filter-button" data-filter="month" onclick="loadRegistros('month', this)" role="tab">Mês</button>
+                    <button class="filter-button" data-filter="all" onclick="loadRegistros('all', this)" role="tab">Todos</button>
+                </nav>
+                
+                <div class="card" style="flex-grow: 1; max-width: 600px; padding: 0.5rem 1rem; overflow-y: auto;">
+                    <ul id="registro-list" class="text-left">
+                        <li class="text-gray-500 p-3">Nenhum registro encontrado.</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section class="screen" id="configuracoes-screen" data-index="2" aria-labelledby="config-heading">
+                <header id="config-heading">
+                    <h2 class="text-2xl font-bold">Configurações de Horário</h2>
+                </header>
+                
+                <form class="config-group card" onsubmit="saveConfig(event)">
+                    <p class="text-sm text-gray-500 mb-4">Defina os horários padrão da sua jornada de trabalho.</p>
+
+                    <label class="config-label">Entrada Padrão:</label>
+                    <input type="time" id="config-entrada" class="config-input" value="08:00" required>
+                    <p class="input-hint">Tolerância: ± 5 min (Registro Automático)</p>
+                    <br>
+
+                    <label class="config-label">Início da Pausa (Ida):</label>
+                    <input type="time" id="config-ida" class="config-input" value="12:00" required>
+                    <br>
+                    
+                    <label class="config-label">Fim da Pausa (Vinda):</label>
+                    <input type="time" id="config-vinda" class="config-input" value="13:00" required>
+                    <br>
+
+                    <label class="config-label">Saída Padrão:</label>
+                    <input type="time" id="config-saida" class="config-input" value="17:00" required>
+                    <p class="input-hint">Tolerância: ± 5 min (Registro Automático)</p>
+                    <br>
+
+                    <button type="submit" class="punch-button" style="width: 100%; margin-top: 0.5rem; justify-content: center;">
+                        SALVAR CONFIGURAÇÕES
+                    </button>
+                    <p id="config-message" class="text-sm text-center mt-3 text-green-600"></p>
+                </form>
+            </section>
+            
+        </article>
+    </main>
+
+    <nav role="navigation">
+        <ul class="nav-list">
+            <li>
+                <a href="#" id="nav-ponto" data-index="0" class="active" aria-label="Acessar tela de Ponto">
+                    <svg class="nav-icon" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.12,104.12,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM136,72V136a8,8,0,0,1-4.7,7.24l-32,16a8,8,0,0,1-6.6-1.55,8,8,0,0,1-1.55-6.6l4-8a8,8,0,0,1,11.24-4.7L128,128V72a8,8,0,0,1,16,0Z"></path></svg>
+                    <span>Ponto</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" id="nav-registro" data-index="1" aria-label="Acessar tela de Registro">
+                    <svg class="nav-icon" viewBox="0 0 256 256"><path d="M168,40H88a8,8,0,0,0-8,8V208a8,8,0,0,0,8,8h80a8,8,0,0,0,8-8V48A8,8,0,0,0,168,40ZM168,200H88V56h80Z"></path></svg>
+                    <span>Registro</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" id="nav-config" data-index="2" aria-label="Acessar tela de Configurações">
+                    <svg class="nav-icon" viewBox="0 0 256 256"><path d="M234.3,164.7l-18.7-8.2a8,8,0,0,0-7.8,1.3l-10.4,8a8,8,0,0,1-9.4-1.3l-18-13.7a8,8,0,0,0-9.4,1.3l-11.8,9.7a8,8,0,0,1-7.1,0L135.5,140a8,8,0,0,0-9.4-1.3l-18,13.7a8,8,0,0,1-9.4,1.3l-10.4-8a8,8,0,0,0-7.8-1.3l-18.7,8.2A8,8,0,0,0,76,172v16a8,8,0,0,0,3.3,6.3l18.7,8.2a8,8,0,0,0,7.8-1.3l10.4-8a8,8,0,0,1,9.4,1.3l18,13.7a8,8,0,0,0,9.4-1.3l11.8-9.7a8,8,0,0,1,7.1,0L174.5,208a8,8,0,0,0,9.4,1.3l18-13.7a8,8,0,0,1,9.4-1.3l10.4,8a8,8,0,0,0,7.8,1.3l18.7-8.2A8,8,0,0,0,240,188V172A8,8,0,0,0,234.3,164.7ZM128,168a40,40,0,1,0-40-40A40,40,0,0,0,128,168Z"></path></svg>
+                    <span>Config.</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <script src="script.js"></script>
+</body>
+</html>
